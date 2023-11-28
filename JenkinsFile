@@ -33,14 +33,24 @@ pipeline {
             }
         }
         stage('Package') {
-            agent {
-                label 'linux_slave'
-            }
+            //agent {
+            //    label 'linux_slave'
+            //}
+            agent any
             input{
                 message "Select the version"
                 ok "version selected"
                 parameters{
                     choice(name:'NewApp', choices:['1.1','1.2','1.3'])
+                }
+            }
+            steps{
+                script{
+                    sshagent([deploy-server-key]){
+                        echo 'Packaging the code'
+                        sh "scp server-config.sh -o StrictHostKeyChecking=no ec2-user@172.31.10.38:/home/ec2-user"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.10.38 'bash ~/server-config.sh'"
+                    }
                 }
             }
             steps {

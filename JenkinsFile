@@ -48,8 +48,8 @@ pipeline {
                 script{
                     sshagent(['deploy-server-key']) {
                         echo 'Packaging the code'
-                        sh "scp server-config.sh -o 'StrictHostKeyChecking no' ec2-user@172.31.11.215:/home/ec2-user"
-                        sh "ssh -o 'StrictHostKeyChecking no' ec2-user@172.31.11.215 'bash ~/server-config.sh'"
+                        sh "scp -o StrictHostKeyChecking=no server-config.sh  ec2-user@172.31.10.38:/home/ec2-user"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.10.38 'bash ~/server-config.sh'"
                     }
                 }
             }

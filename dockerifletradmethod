@@ -1,0 +1,26 @@
+from tomcat:8.5.72-jdk8-openjdk-buster
+Env MAVEN_HOME /usr/share/maven
+Env MAVEN_VERSION 3.8.4
+
+#install maven
+Run apt-get update && \
+apt-get install -y curl && \
+curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz | tar xzf - -C /usr/share && \
+mv /usr/share/apache-maven-3.8.4 /usr/share/maven && \
+ln -s /usr/share/maven/bin/mvn /usr/bin/mvn && \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY ./pom.xml ./pom.xml
+COPY ./src ./src
+
+Run mvn package
+
+# To clear the webapp directory
+Run rm -rf /usr/local/tomcat/webapp/*
+
+# copy war file from addressbook atrget folder to webapps folder
+Run cp /app/target/addressbook.war /usr/local/tomcat/webapps/
+Expose 8080
+cmd ["catalina.sh","run"]

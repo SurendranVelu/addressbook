@@ -45,7 +45,7 @@ pipeline {
             agent any
             steps{
                 script{
-                    sshagent(['build-server']) {
+                    sshagent(['build_server']) {
                         withCredentials([usernamePassword(credentialsId:'docker_hub',passwordVariable: 'PASSWORD',usernameVariable: 'USERNAME')]){
                         echo 'Packaging the code'
                         sh "scp -o StrictHostKeyChecking=no server-config.sh  ${BUILD_SERVER_IP}:/home/ec2-user"
@@ -72,7 +72,7 @@ pipeline {
             }
             steps{
                 script{
-                    sshagent(['build-server']) {
+                    sshagent(['build_server']) {
                         withCredentials([usernamePassword(credentialsId:'docker_hub',passwordVariable: 'PASSWORD',usernameVariable: 'USERNAME')]){
                         sh "ssh -o StrictHostKeyChecking=no ${DEPLOY_SERVER_IP} suod yum install docker -y"
                         sh "ssh ${DEPLOY_SERVER_IP} sudo systemctl start docker"

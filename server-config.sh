@@ -18,4 +18,4 @@ else
 fi
 #cd /home/ec2-user/addressbook
 #mvn package
-sudo docker build -t imagename /home/ec2-user/addressbook 
+sudo docker build -t $1:$2 /home/ec2-user/addressbook 
